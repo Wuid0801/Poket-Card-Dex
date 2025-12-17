@@ -28,12 +28,42 @@ async function generatePokemonData() {
       }
     });
 
+    const { data: typeNamesCsv } = await axios.get("https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/type_names.csv");
+    const { data: pokemonTypesCsv } = await axios.get("https://raw.githubusercontent.com/PokeAPI/pokeapi/master/data/v2/csv/pokemon_types.csv");
+
+    const typeIdToKoName = {};
+    typeNamesCsv.split('\n').forEach(row => {
+      const cols = row.split(',');
+      if (cols[1] === '3') {
+        typeIdToKoName[cols[0]] = cols[2];
+      }
+    });
+
+    const pokemonIdToTypes = {};
+    pokemonTypesCsv.split('\n').forEach(row => {
+      const cols = row.split(',');
+      const pId = cols[0];
+      const tId = cols[1];
+      const slot = parseInt(cols[2]);
+      
+      if (pId && tId && typeIdToKoName[tId]) {
+        if (!pokemonIdToTypes[pId]) pokemonIdToTypes[pId] = [];
+        pokemonIdToTypes[pId].push({ slot, name: typeIdToKoName[tId] });
+      }
+    });
+
+    Object.keys(pokemonIdToTypes).forEach(pId => {
+        pokemonIdToTypes[pId].sort((a, b) => a.slot - b.slot);
+        pokemonIdToTypes[pId] = pokemonIdToTypes[pId].map(t => t.name);
+    });
+
     const mergedData = results.map((pokemon) => {
       const id = pokemon.url.split('/').filter(Boolean).pop();
       return {
         id,
         enName: pokemon.name,
         koName: koNameMap[id] || pokemon.name,
+        types: pokemonIdToTypes[id] || [],
         url: pokemon.url
       };
     });

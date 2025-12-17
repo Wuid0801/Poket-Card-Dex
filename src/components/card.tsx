@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import PokemonDetailModal from "./PokemonDetailModal";
+import { getTypeColor } from "../hooks/useGetPoket";
 
 /**
  * 포켓몬 카드 컴포넌트
@@ -91,7 +92,11 @@ const Card = ({ pokemon }: { pokemon: any }) => {
             className="absolute inset-0 pointer-events-none z-10 opacity-0 transition-opacity duration-300 mix-blend-overlay"
           />
 
-          <div className="flex flex-col items-center justify-center h-full relative z-0">
+          <div className="flex flex-col items-center justify-center h-full relative z-0"
+            style={{
+              backgroundColor: pokemon.types?.[0] ? `${getTypeColor(pokemon.types[0])}80` : 'transparent'
+            }}
+          >
             <div className="text-gray-400 font-bold self-start absolute top-2 left-2">
               #{String(pokemonId).padStart(4, '0')}
             </div>

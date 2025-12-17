@@ -7,6 +7,7 @@ interface PokemonWithKo {
   enName: string;
   koName: string;
   url: string;
+  types: string[];
 }
 
 const PoketDexTemplate = () => {
@@ -42,17 +43,14 @@ const PoketDexTemplate = () => {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-gray-100 p-4 rounded-lg">
-        <div className="flex flex-col w-full sm:w-auto">
+        <div className="w-full sm:w-auto">
           <input
             type="text"
             placeholder="이름 검색 (예: pikachu, 피카츄)"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-80"
+            className="text-gray-900 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 w-full sm:w-80"
           />
-          <span className="text-xs text-gray-500 mt-1 ml-1">
-            한국어 및 영어 이름으로 검색 가능
-          </span>
         </div>
 
         <div className="flex items-center gap-2">
