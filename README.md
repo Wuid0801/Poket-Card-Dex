@@ -55,20 +55,20 @@
 
 ```
 src/
-├── components/          # React 컴포넌트
+├── components/
 │   ├── card.tsx        # 포켓몬 카드 (3D 효과 포함)
 │   ├── PokemonDetailModal.tsx  # 상세 정보 모달
 │   ├── poketDexTemplate.tsx    # 메인 템플릿
 │   ├── SearchBar.tsx           # 검색바
 │   ├── Pagination.tsx          # 페이지네이션
 │   └── ImageWithFallback.tsx   # 이미지 로딩 처리
-├── hooks/              # 커스텀 훅
+├── hooks/
 │   └── useGetPoket.tsx # 포켓몬 데이터 페칭
-├── types/              # TypeScript 타입 정의
+├── types/
 │   └── pokemon.ts      # 포켓몬 관련 타입
-├── constants/          # 상수 정의
-│   └── pokemon.ts      # 타입 색상, 한글명 등
-└── assets/             # 정적 파일
+├── constants/          
+│   └── pokemon.ts      # 상수 정의 (타입 색상, 한글명 등)
+└── assets/
     └── json/           # 로컬 데이터
 ```
 
