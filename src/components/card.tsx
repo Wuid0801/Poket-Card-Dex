@@ -4,6 +4,7 @@ import { ImageWithFallback } from "./ImageWithFallback";
 import { getTypeColor, POKEMON_IMAGE_BASE_URL } from "../constants/pokemon";
 import { Pokemon } from "../types/pokemon";
 import { overlay } from "overlay-kit";
+import { TYPE_DEFS } from "./FilterChips";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -192,22 +193,27 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
               />
             </div>
 
-            <div className="text-xl text-center font-bold text-gray-800">
+            <div className="text-xl text-center font-bold text-gray-800 mb-3">
               {pokemon.koName || pokemon.name || pokemon.enName || "Unknown"}
             </div>
 
-            <div className="flex gap-2 mb-6">
-              {pokemon.types.map((type: string) => (
-                <span
-                  key={type}
-                  className="px-4 py-1.5 rounded-full text-sm font-bold tracking-wide shadow-sm text-white"
-                  style={{
-                    border: `1px solid white`, // We would need a helper for colors, but for now fallback to gray or implement simple specific colors if possible.
-                  }}
-                >
-                  {type}
-                </span>
-              ))}
+            <div className="flex flex-wrap justify-center gap-2 mb-4">
+              {pokemon.types.map((type: string) => {
+                const def = TYPE_DEFS.find((t) => t.korean === type);
+                const bg = def?.color ?? "rgba(0,0,0,0.45)";
+
+                return (
+                  <span
+                    key={type}
+                    className="text-white px-4 py-1.5 rounded-full text-xs sm:text-sm font-semibold tracking-wide shadow-md"
+                    style={{
+                      backgroundColor: bg,
+                    }}
+                  >
+                    {type}
+                  </span>
+                );
+              })}
             </div>
           </div>
         </div>
