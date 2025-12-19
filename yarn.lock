@@ -1555,6 +1555,11 @@ optionator@^0.9.3:
     type-check "^0.4.0"
     word-wrap "^1.2.5"
 
+overlay-kit@^1.8.6:
+  version "1.8.6"
+  resolved "https://registry.yarnpkg.com/overlay-kit/-/overlay-kit-1.8.6.tgz#f76697350d1e723ff0a1d47cfb532351c0e356d1"
+  integrity sha512-0JeZ+QcoMCEgW4OndzCJger/eHZHGan7M9iQ6sHxrMPVwLyqSN8665CdciNrNjzorV3xGtqVeZUs2o4rt4ddYw==
+
 p-limit@^3.0.2:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/p-limit/-/p-limit-3.1.0.tgz#e1daccbe78d0d1388ca18c64fea38e3e57e3706b"

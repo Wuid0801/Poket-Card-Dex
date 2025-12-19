@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import PokemonDetailModal from "./PokemonDetailModal";
 import { getTypeColor } from "../hooks/useGetPoket";
-
+import { overlay } from "overlay-kit";
 /**
  * 포켓몬 카드 컴포넌트
  * - 마우스 호버 시 3D 회전 효과 (Tilting)
@@ -15,10 +15,11 @@ const Card = ({ pokemon }: { pokemon: any }) => {
   const cardRef = useRef<HTMLDivElement>(null);
   const glowRef = useRef<HTMLDivElement>(null);
   const FrameRef = useRef<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCardClick = () => {
-    setIsModalOpen(true);
+    overlay.open(({ isOpen, close, unmount }) => (
+      <PokemonDetailModal pokemonId={pokemonId}  onClose={() => { close(); unmount(); }} />
+    ))
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -114,12 +115,6 @@ const Card = ({ pokemon }: { pokemon: any }) => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <PokemonDetailModal
-          pokemonId={pokemonId}
-          onClose={() => setIsModalOpen(false)}
-        />
-      )}
     </>
   );
 };
