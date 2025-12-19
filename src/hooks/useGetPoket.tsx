@@ -1,30 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { PokemonType, PokemonDetail, PokemonListResponse } from "../types/pokemon";
+import { POKEMON_TYPE_KO } from "../constants/pokemon";
 
-// 1. 타입 & 상수 정의 (Types & Constants)
-export type PokemonType =
-  | 'normal' | 'fire' | 'water' | 'electric' | 'grass' | 'ice'
-  | 'fighting' | 'poison' | 'ground' | 'flying' | 'psychic' | 'bug'
-  | 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy';
+export type { PokemonType, PokemonDetail, PokemonListResponse } from "../types/pokemon";
 
-export const POKEMON_TYPE_KO: Record<PokemonType, string> = {
-  normal: '노말', fire: '불꽃', water: '물', electric: '전기', grass: '풀', ice: '얼음',
-  fighting: '격투', poison: '독', ground: '땅', flying: '비행', psychic: '에스퍼', bug: '벌레',
-  rock: '바위', ghost: '고스트', dragon: '드래곤', dark: '악', steel: '강철', fairy: '페어리',
-};
-
-export const getTypeColor = (type: string) => {
-  const colors: Record<string, string> = {
-    '노말': '#A8A77A', '불꽃': '#EE8130', '물': '#6390F0', '전기': '#F7D02C',
-    '풀': '#7AC74C', '얼음': '#96D9D6', '격투': '#C22E28', '독': '#A33EA1',
-    '땅': '#E2BF65', '비행': '#A98FF3', '에스퍼': '#F95587', '벌레': '#A6B91A',
-    '바위': '#B6A136', '고스트': '#735797', '드래곤': '#6F35FC', '악': '#705746',
-    '강철': '#B7B7CE', '페어리': '#D685AD',
-  };
-  return colors[type] || '#68A090';
-};
-
-// 2. API 응답 데이터 타입 (Raw API Interfaces)
+// API 응답 데이터 타입 (Raw API Interfaces)
 interface ApiLanguage {
   name: string;
   url: string;
@@ -62,25 +43,6 @@ interface ApiType {
 
 interface PokemonInfoApi {
   types: ApiType[];
-}
-
-// 3. 앱에서 사용할 가공된 데이터 타입 (Application Interfaces)
-export interface PokemonDetail {
-  id: number;
-  name: string;
-  types: string[];
-  koGenus: string;
-  koFlavor: string;
-}
-
-export interface PokemonListResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: {
-    name: string;
-    url: string;
-  }[];
 }
 
 const getPoketDex = async (offset: number, limit: number): Promise<PokemonListResponse> => {

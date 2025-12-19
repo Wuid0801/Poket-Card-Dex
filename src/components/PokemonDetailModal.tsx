@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getTypeColor, useGetPokemonDetail } from '../hooks/useGetPoket';
+import { useGetPokemonDetail } from '../hooks/useGetPoket';
+import { getTypeColor, POKEMON_OFFICIAL_ARTWORK_URL, POKEMON_IMAGE_BASE_URL } from '../constants/pokemon';
+import { ImageWithFallback } from './ImageWithFallback';
 
 interface Props {
     pokemonId: number | string;
@@ -85,14 +87,14 @@ const PokemonDetailModal = ({ pokemonId, onClose }: Props) => {
 
                         <div className="relative mb-6 group">
                             <div className="absolute inset-0 bg-blue-500/20 blur-xl rounded-full scale-75 group-hover:scale-95 transition-transform duration-500"></div>
-                            <img
-                                src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${data.pokemon.id}.png`}
-                                onError={(e) => {
-                                    (e.target as HTMLImageElement).src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${data.pokemon.id}.png`;
-                                }}
-                                alt={data.pokemon.name}
-                                className="w-48 h-48 relative z-10 drop-shadow-2xl transition-transform duration-300 hover:scale-105"
-                            />
+                            <div className="relative w-48 h-48 z-10">
+                                <ImageWithFallback
+                                    src={`${POKEMON_OFFICIAL_ARTWORK_URL}/${data.pokemon.id}.png`}
+                                    fallbackSrc={`${POKEMON_IMAGE_BASE_URL}/${data.pokemon.id}.png`}
+                                    alt={data.pokemon.name}
+                                    className="w-full h-full drop-shadow-2xl transition-transform duration-300 hover:scale-105 object-contain"
+                                />
+                            </div>
                         </div>
 
                         <div className="flex gap-2 mb-6">

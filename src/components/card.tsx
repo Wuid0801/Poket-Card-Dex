@@ -1,15 +1,22 @@
-import { useRef, useState } from "react";
+import React, { useRef } from "react";
 import PokemonDetailModal from "./PokemonDetailModal";
-import { getTypeColor } from "../hooks/useGetPoket";
+import { ImageWithFallback } from "./ImageWithFallback";
+import { getTypeColor, POKEMON_IMAGE_BASE_URL } from "../constants/pokemon";
+import { Pokemon } from "../types/pokemon";
 import { overlay } from "overlay-kit";
+
+interface PokemonCardProps {
+  pokemon: Pokemon;
+}
+
 /**
  * 포켓몬 카드 컴포넌트
  * - 마우스 호버 시 3D 회전 효과 (Tilting)
  * - 마우스 움직임에 따른 광택(Glow) 효과
  */
-const Card = ({ pokemon }: { pokemon: any }) => {
-  // 포켓몬 URL에서 ID 추출 (또는 이미 pokemon.id가 있으면 사용)
-  const pokemonId = pokemon.id || pokemon.url.split("/").filter(Boolean).pop();
+export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
+  // 포켓몬 ID 추출
+  const pokemonId = String(pokemon.id || pokemon.url.split("/").filter(Boolean).pop() || '');
 
   // 직접 DOM을 조작하기 위해 useRef 사용 (렌더링 최적화)
   const cardRef = useRef<HTMLDivElement>(null);
@@ -84,8 +91,7 @@ const Card = ({ pokemon }: { pokemon: any }) => {
           onMouseMove={handleMouseMove}
           onMouseLeave={handleMouseLeave}
           onClick={handleCardClick}
-          className="w-full h-full border border-gray-300 rounded-md p-4 transition-transform duration-100 ease-out bg-white shadow-md relative overflow-hidden transform-style-3d cursor-pointer hover:shadow-xl"
-          style={{ transformStyle: "preserve-3d" }}
+          className="w-full h-full rounded-md transition-transform duration-100 ease-out bg-white shadow-md relative overflow-hidden transform-style-3d cursor-pointer hover:shadow-xl"
         >
           {/* 반짝임/광택 효과 오버레이 */}
           <div
@@ -94,22 +100,33 @@ const Card = ({ pokemon }: { pokemon: any }) => {
           />
 
           <div className="flex flex-col items-center justify-center h-full relative z-0"
-            style={{
-              backgroundColor: pokemon.types?.[0] ? `${getTypeColor(pokemon.types[0])}80` : 'transparent'
-            }}
+            style={
+              pokemon.types && pokemon.types.length >= 2
+                ? {
+                    backgroundImage: `linear-gradient(to bottom right, ${getTypeColor(pokemon.types[0])}80, ${getTypeColor(pokemon.types[1])}80)`,
+                  }
+                : pokemon.types?.[0]
+                ? {
+                    backgroundColor: `${getTypeColor(pokemon.types[0])}80`,
+                  }
+                : undefined
+            }
           >
             <div className="text-gray-400 font-bold self-start absolute top-2 left-2">
               #{String(pokemonId).padStart(4, '0')}
             </div>
 
-            <img
-              src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`}
-              alt={pokemon.name}
-              className="w-[140px] h-[140px] drop-shadow-lg mb-4"
-            />
+            <div className="relative w-[140px] h-[140px] mb-4">
+              <ImageWithFallback
+                src={`${POKEMON_IMAGE_BASE_URL}/${pokemonId}.png`}
+                alt={pokemon.koName || pokemon.name}
+                className="w-full h-full drop-shadow-lg object-contain"
+                fallbackSrc={`${POKEMON_IMAGE_BASE_URL}/${pokemonId}.png`}
+              />
+            </div>
 
-            <div className="text-xl text-center font-bold capitalize text-gray-800">
-              {pokemon.koName || pokemon.name}
+            <div className="text-xl text-center font-bold text-gray-800">
+              {pokemon.koName || pokemon.name || pokemon.enName || 'Unknown'}
             </div>
           </div>
         </div>
@@ -119,4 +136,3 @@ const Card = ({ pokemon }: { pokemon: any }) => {
   );
 };
 
-export default Card;
