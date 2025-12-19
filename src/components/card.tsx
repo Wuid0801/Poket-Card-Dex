@@ -16,7 +16,9 @@ interface PokemonCardProps {
  */
 export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   // 포켓몬 ID 추출
-  const pokemonId = String(pokemon.id || pokemon.url.split("/").filter(Boolean).pop() || '');
+  const pokemonId = String(
+    pokemon.id || pokemon.url.split("/").filter(Boolean).pop() || ""
+  );
 
   // 직접 DOM을 조작하기 위해 useRef 사용 (렌더링 최적화)
   const cardRef = useRef<HTMLDivElement>(null);
@@ -26,8 +28,14 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
 
   const handleCardClick = () => {
     overlay.open(({ isOpen, close, unmount }) => (
-      <PokemonDetailModal pokemonId={pokemonId}  onClose={() => { close(); unmount(); }} />
-    ))
+      <PokemonDetailModal
+        pokemonId={pokemonId}
+        onClose={() => {
+          close();
+          unmount();
+        }}
+      />
+    ));
   };
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -66,7 +74,7 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
         const bgPos1 = `${percentX * 0.5}% ${percentY * 0.5}%`;
         const bgPos2 = `${100 - percentX * 0.5}% ${100 - percentY * 0.5}%`;
         const bgPos3 = `${percentX * 0.3}% ${100 - percentY * 0.3}%`;
-        
+
         holographicRef.current.style.background = `
           linear-gradient(105deg,
             transparent 40%,
@@ -90,11 +98,11 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
             transparent 60%
           )
         `;
-        holographicRef.current.style.backgroundSize = '200% 200%, 200% 200%, 200% 200%';
+        holographicRef.current.style.backgroundSize =
+          "200% 200%, 200% 200%, 200% 200%";
         holographicRef.current.style.backgroundPosition = `${bgPos1}, ${bgPos2}, ${bgPos3}`;
-        holographicRef.current.style.opacity = '1';
+        holographicRef.current.style.opacity = "1";
       }
-
     });
   };
 
@@ -104,16 +112,19 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
       FrameRef.current = 0;
     }
 
-    if (!cardRef.current || !holographicRef.current)
-      return;
+    if (!cardRef.current || !holographicRef.current) return;
 
-    cardRef.current.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)';
-    holographicRef.current.style.opacity = '0';
+    cardRef.current.style.transform =
+      "perspective(1000px) rotateX(0deg) rotateY(0deg) scale3d(1, 1, 1)";
+    holographicRef.current.style.opacity = "0";
   };
 
   return (
     <>
-      <div className="relative w-[220px] h-[310px] hover:z-10 perspective-1000" style={{ perspective: "300px" }}>
+      <div
+        className="relative w-[220px] h-[310px] hover:z-10 perspective-1000"
+        style={{ perspective: "300px" }}
+      >
         <div
           ref={cardRef}
           onMouseMove={handleMouseMove}
@@ -125,28 +136,41 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
           <div
             ref={holographicRef}
             className="absolute inset-0 pointer-events-none z-10 opacity-0 transition-opacity duration-300"
-            style={{ mixBlendMode: 'screen' }}
+            style={{ mixBlendMode: "screen" }}
           />
-          
+
           {/* SVG 노이즈 효과 */}
           <div
             ref={noiseRef}
             className="absolute inset-0 pointer-events-none z-10 opacity-[0.15]"
-            style={{ mixBlendMode: 'overlay' }}
+            style={{ mixBlendMode: "overlay" }}
           >
             <svg width="100%" height="100%" className="absolute inset-0">
               <filter id={`noise-${pokemonId}`}>
-                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" stitchTiles="stitch"/>
+                <feTurbulence
+                  type="fractalNoise"
+                  baseFrequency="0.9"
+                  numOctaves="4"
+                  stitchTiles="stitch"
+                />
               </filter>
-              <rect width="100%" height="100%" filter={`url(#noise-${pokemonId})`} opacity="0.4"/>
+              <rect
+                width="100%"
+                height="100%"
+                filter={`url(#noise-${pokemonId})`}
+                opacity="0.4"
+              />
             </svg>
           </div>
 
-          <div className="flex flex-col items-center justify-center h-full relative z-0"
+          <div
+            className="flex flex-col items-center justify-center h-full relative z-0"
             style={
               pokemon.types && pokemon.types.length >= 2
                 ? {
-                    backgroundImage: `linear-gradient(to bottom right, ${getTypeColor(pokemon.types[0])}80, ${getTypeColor(pokemon.types[1])}80)`,
+                    backgroundImage: `linear-gradient(to bottom right, ${getTypeColor(
+                      pokemon.types[0]
+                    )}80, ${getTypeColor(pokemon.types[1])}80)`,
                   }
                 : pokemon.types?.[0]
                 ? {
@@ -156,7 +180,7 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
             }
           >
             <div className="text-gray-400 font-bold self-start absolute top-2 left-2">
-              #{String(pokemonId).padStart(4, '0')}
+              #{String(pokemonId).padStart(4, "0")}
             </div>
 
             <div className="relative w-[140px] h-[140px] mb-4">
@@ -169,13 +193,25 @@ export const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
             </div>
 
             <div className="text-xl text-center font-bold text-gray-800">
-              {pokemon.koName || pokemon.name || pokemon.enName || 'Unknown'}
+              {pokemon.koName || pokemon.name || pokemon.enName || "Unknown"}
+            </div>
+
+            <div className="flex gap-2 mb-6">
+              {pokemon.types.map((type: string) => (
+                <span
+                  key={type}
+                  className="px-4 py-1.5 rounded-full text-sm font-bold tracking-wide shadow-sm text-white"
+                  style={{
+                    border: `1px solid white`, // We would need a helper for colors, but for now fallback to gray or implement simple specific colors if possible.
+                  }}
+                >
+                  {type}
+                </span>
+              ))}
             </div>
           </div>
         </div>
       </div>
-
     </>
   );
 };
-
